@@ -3,7 +3,7 @@
 #define GODOT_JVM_KOTLINEDITOREXPORTPLUGIN_H
 
 
-#include <editor/editor_export.h>
+#include <editor/export/editor_export.h>
 #include "jni/jvm.h"
 
 class KotlinEditorExportPlugin : public EditorExportPlugin {

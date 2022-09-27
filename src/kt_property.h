@@ -2,7 +2,7 @@
 #define GODOT_JVM_KT_PROPERTY_H
 
 #include <core/object/object.h>
-#include <core/multiplayer/multiplayer.h>
+#include <scene/main/multiplayer_api.h>
 #include "jni/wrapper.h"
 #include "kt_object.h"
 #include "java_instance_wrapper.h"
@@ -16,7 +16,7 @@ struct KtPropertyInfo : public JavaInstanceWrapper<KtPropertyInfo> {
     StringName class_name;
     PropertyHint hint;
     String hint_string;
-    Multiplayer::RPCMode rpc_mode;
+    MultiplayerAPI::RPCMode rpc_mode;
     bool visible_in_editor;
 
     PropertyInfo toPropertyInfo();
@@ -42,7 +42,7 @@ public:
     ~KtProperty();
 
     StringName get_name() const;
-    Multiplayer::RPCMode get_rpc_mode() const;
+    MultiplayerAPI::RPCMode get_rpc_mode() const;
 
     PropertyInfo get_member_info();
 

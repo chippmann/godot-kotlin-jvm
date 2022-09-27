@@ -20,12 +20,12 @@ jobs:
           - name: Linux
             os: ubuntu-20.04
             platform: x11
-            arch: 64
+            arch: x86_64
             output_folder: bin/
           - name: OSX-x64
             os: macos-latest
             platform: osx
-            arch: 64
+            arch: x86_64
             output_folder: bin/
           - name: OSX-arm64
             os: macos-latest
@@ -35,7 +35,7 @@ jobs:
           - name: Windows
             os: windows-2019
             platform: windows
-            arch: 64
+            arch: x86_64
             output_folder: bin/
           - name: Android-armv7
             os: ubuntu-latest
@@ -49,6 +49,14 @@ jobs:
             output_folder: platform/android/java/lib/libs/dev/arm64-v8a/
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Download Vulkan SDK
+        if: matrix.platform == 'osx'
+        uses: humbletim/setup-vulkan-sdk@v1.2.0
+        with:
+          vulkan-query-version: 1.3.204.0
+          vulkan-components: Vulkan-Headers, Vulkan-Loader
+          vulkan-use-cache: true
+
       - name: Clone Godot Engine
         uses: actions/checkout@v2
         with:
@@ -93,9 +101,9 @@ jobs:
         if: matrix.platform != 'android'
         uses: ./.github/actions/godot-build
         with:
-          sconsflags: arch=${{ matrix.arch }} -j${{ steps.cpu-cores.outputs.count }}
+          sconsflags: arch=${{ matrix.arch }} -j${{ steps.cpu-cores.outputs.count }} bits=64
           platform: ${{ matrix.platform }}
-          target: debug
+          target: template_debug
           tools: false
       - name: Build android debug export template binary
         if: matrix.platform == 'android'
@@ -103,7 +111,7 @@ jobs:
         with:
           sconsflags: android_arch=${{ matrix.arch }} -j${{ steps.cpu-cores.outputs.count }}
           platform: ${{ matrix.platform }}
-          target: debug
+          target: template_debug
           tools: false
       - name: Upload android binary
         if: matrix.platform == 'android'
