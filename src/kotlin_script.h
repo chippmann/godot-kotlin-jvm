@@ -66,7 +66,7 @@ public:
 
     void set_path(const String& p_path, bool p_take_over) override;
 
-    const Vector<Multiplayer::RPCConfig> get_rpc_methods() const override;
+    const Variant get_rpc_config() const override;
 
 #ifdef TOOLS_ENABLED
     Vector<DocData::ClassDoc> get_documentation() const override;

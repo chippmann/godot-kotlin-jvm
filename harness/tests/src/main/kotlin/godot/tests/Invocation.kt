@@ -1,11 +1,45 @@
 package godot.tests
 
-import godot.*
-import godot.annotation.*
+import godot.Button
+import godot.NavigationMesh
+import godot.Node3D
+import godot.XRServer
+import godot.annotation.ColorNoAlpha
+import godot.annotation.Dir
+import godot.annotation.DoubleRange
+import godot.annotation.EnumFlag
+import godot.annotation.EnumTypeHint
+import godot.annotation.ExpEasing
+import godot.annotation.ExpRange
+import godot.annotation.Export
 import godot.annotation.File
+import godot.annotation.FloatRange
+import godot.annotation.IntFlag
 import godot.annotation.IntRange
 import godot.annotation.LongRange
-import godot.core.*
+import godot.annotation.MultilineText
+import godot.annotation.PlaceHolderText
+import godot.annotation.RegisterClass
+import godot.annotation.RegisterFunction
+import godot.annotation.RegisterProperty
+import godot.annotation.RegisterSignal
+import godot.core.Color
+import godot.core.Dictionary
+import godot.core.NodePath
+import godot.core.PackedByteArray
+import godot.core.PackedColorArray
+import godot.core.PackedFloat64Array
+import godot.core.PackedInt32Array
+import godot.core.PackedStringArray
+import godot.core.PackedVector2Array
+import godot.core.PackedVector3Array
+import godot.core.RID
+import godot.core.StringName
+import godot.core.VariantArray
+import godot.core.Vector2
+import godot.core.Vector3
+import godot.core.dictionaryOf
+import godot.core.variantArrayOf
 import godot.extensions.getNodeAs
 import godot.signals.signal
 import godot.tests.subpackage.OtherScript
@@ -18,7 +52,7 @@ enum class TestEnum {
 }
 
 @RegisterClass
-class Invocation : Spatial() {
+class Invocation : Node3D() {
 
 	@Export
 	@RegisterProperty
@@ -332,7 +366,7 @@ class Invocation : Spatial() {
 	override fun _ready() {
 		val formerName = name
 		println("Name is: $name")
-		name = "TestName"
+		name = StringName("TestName") //TODO/4.0: provide convenience wrapper for StringName properties and parameters
 		println("Name is: $name")
 		name = formerName
 		val test = DateTime.now() //external dependency to test dependency inclusion in dummyCompilation
@@ -346,7 +380,7 @@ class Invocation : Spatial() {
 		signalOneParam.connect(invocation, invocation::hookOneParam)
 		signalTwoParam.connect(invocation, invocation::hookTwoParam)
 
-		(getNodeOrNull(path) as Button?)?.signalPressed?.connect(
+		(getNodeOrNull(path) as Button?)?.pressed?.connect(
 			invocation,
 			invocation::hookNoParam
 		)
@@ -492,10 +526,10 @@ class Invocation : Spatial() {
 
 	//Type cast checks
 	@RegisterFunction
-	fun parentIsSpatial() = getParent() is Spatial
+	fun parentIsNode3D() = getParent() is Node3D
 
 	@RegisterFunction
-	fun isObjectSpatial(obj: Object) = obj is Spatial
+	fun isObjectNode3D(obj: Object) = obj is Node3D
 
 	@RegisterFunction
 	fun otherJvmId(invocation: Invocation) = invocation.jvmId
@@ -608,8 +642,8 @@ class Invocation : Spatial() {
 	// Singleton tests
 
 	@RegisterFunction
-	fun isSentArvrSameInstanceAsJvmSingleton(arvrServer: ARVRServer) =
-		ARVRServer.getInstanceId() == arvrServer.getInstanceId()
+	fun isSentXrSameInstanceAsJvmSingleton(xrServer: XRServer) =
+        XRServer.getInstanceId() == xrServer.getInstanceId()
 
 	@RegisterFunction
 	fun nullableStringIsNull(nullableString: String?) = nullableString == null
