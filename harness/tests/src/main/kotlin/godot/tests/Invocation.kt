@@ -38,6 +38,7 @@ import godot.core.StringName
 import godot.core.VariantArray
 import godot.core.Vector2
 import godot.core.Vector3
+import godot.core.asStringName
 import godot.core.dictionaryOf
 import godot.core.variantArrayOf
 import godot.extensions.getNodeAs
@@ -366,7 +367,7 @@ class Invocation : Node3D() {
 	override fun _ready() {
 		val formerName = name
 		println("Name is: $name")
-		name = StringName("TestName") //TODO/4.0: provide convenience wrapper for StringName properties and parameters
+		name = "TestName".asStringName()
 		println("Name is: $name")
 		name = formerName
 		val test = DateTime.now() //external dependency to test dependency inclusion in dummyCompilation
