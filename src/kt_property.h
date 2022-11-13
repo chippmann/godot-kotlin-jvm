@@ -2,7 +2,6 @@
 #define GODOT_JVM_KT_PROPERTY_H
 
 #include <core/object/object.h>
-#include <core/multiplayer/multiplayer.h>
 #include "jni/wrapper.h"
 #include "kt_object.h"
 #include "java_instance_wrapper.h"
