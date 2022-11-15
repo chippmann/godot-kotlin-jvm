@@ -21,10 +21,10 @@ jobs:
             platform: x11
             binary: godot.x11.opt.tools.64
             cat_command: cat
-          - name: OSX
+          - name: MacOs
             os: macos-latest
             platform: macos
-            binary: godot.osx.opt.tools.64
+            binary: godot.macos.opt.tools.64
             cat_command: cat
           - name: Windows
             os: windows-2019
