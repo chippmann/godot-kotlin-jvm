@@ -23,7 +23,7 @@ jobs:
             cat_command: cat
           - name: OSX
             os: macos-latest
-            platform: osx
+            platform: macos
             binary: godot.osx.opt.tools.64
             cat_command: cat
           - name: Windows
