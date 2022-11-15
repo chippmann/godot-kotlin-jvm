@@ -53,6 +53,11 @@ jobs:
           sudo apt-get update && sudo apt-get install build-essential pkg-config libx11-dev libxcursor-dev \
             libxinerama-dev libgl1-mesa-dev libglu-dev libasound2-dev libpulse-dev libudev-dev libxi-dev libxrandr-dev yasm
 
+      - name: Setup Vulkan SDK
+        if: matrix.platform == 'macos'
+        run: |
+          sh misc/scripts/install_vulkan_sdk_macos.sh
+
       - name: Clone Godot Engine
         uses: actions/checkout@v2
         with:
@@ -100,7 +105,7 @@ jobs:
       - name: Build with editor release
         env:
           SCONS_CACHE: ${{github.workspace}}/${{matrix.platform}}/.scons_cache/
-        run: scons platform=${{ matrix.platform }} target=release_debug -j${{ steps.cpu-cores.outputs.count }}
+        run: scons platform=${{ matrix.platform }} target=editor -j${{ steps.cpu-cores.outputs.count }}
 
       - name: Build godot-bootstrap
         uses: eskatos/gradle-command-action@v1
