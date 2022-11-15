@@ -1,5 +1,7 @@
 package godot.annotation.processor.visitor
 
+import com.google.devtools.ksp.getAllSuperTypes
+import com.google.devtools.ksp.processing.KSPLogger
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSFile
 import com.google.devtools.ksp.symbol.KSVisitorVoid
@@ -14,6 +16,7 @@ import godot.entrygenerator.model.RegisteredClass
 import godot.entrygenerator.model.SourceFile
 
 class RegistrationAnnotationVisitor(
+    private val logger: KSPLogger,
     private val projectBasePath: String,
     private val registeredClassToKSFileMap: MutableMap<RegisteredClass, KSFile>,
     private val sourceFilesContainingRegisteredClasses: MutableList<SourceFile>
@@ -34,10 +37,17 @@ class RegistrationAnnotationVisitor(
             .mapNotNull { declaration ->
                 when (declaration) {
                     is KSClassDeclaration -> {
-                        val clazz = declaration.mapToClazz(projectBasePath)
-                        if (clazz is RegisteredClass) {
-                            clazz
-                        } else null
+                        val type = declaration.asType(listOf())
+                        val supertypes = declaration.getAllSuperTypes()
+                        if (type.isError || supertypes.any { it.isError }) {
+                            logger.warn("Did not process file as it fails to compile", file)
+                            null
+                        } else {
+                            val clazz = declaration.mapToClazz(projectBasePath)
+                            if (clazz is RegisteredClass) {
+                                clazz
+                            } else null
+                        }
                     }
                     else -> if (declaration.annotations.any { registerAnnotations.contains(it.fqNameUnsafe) }) {
                         throw IllegalStateException("${declaration.qualifiedName} was registered top level. Only classes can be registered top level.")
