@@ -11,7 +11,8 @@ fun Project.setupBuildTask(
     deleteBuildLockTask: TaskProvider<out Task>,
     packageBootstrapDexJarTask: TaskProvider<out Task>,
     packageMainDexJarTask: TaskProvider<out Task>,
-    createGraalNativeImageTask: TaskProvider<out Task>,
+    createUsercodeGraalNativeImageTask: TaskProvider<out Task>,
+    createBootstrapGraalNativeImageTask: TaskProvider<out Task>,
     createBuildLockTask: TaskProvider<out Task>,
     generateGdIgnoreFilesTask: TaskProvider<out Task>,
 ) {
@@ -29,7 +30,7 @@ fun Project.setupBuildTask(
                 finalizedBy(packageBootstrapDexJarTask, packageMainDexJarTask)
             }
             if (godotJvmExtension.isGraalNativeImageExportEnabled.get()) {
-                finalizedBy(createGraalNativeImageTask)
+                finalizedBy(createBootstrapGraalNativeImageTask, createUsercodeGraalNativeImageTask)
             }
         }
     }

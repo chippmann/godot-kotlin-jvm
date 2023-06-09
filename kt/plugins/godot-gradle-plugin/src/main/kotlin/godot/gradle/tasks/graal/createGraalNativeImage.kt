@@ -5,16 +5,19 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.tasks.Exec
 import org.gradle.api.tasks.TaskProvider
+import org.gradle.configurationcache.extensions.capitalized
 import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 import java.io.File
 
 fun Project.createGraalNativeImageTask(
+    jar: File,
+    name: String,
     checkNativeImageToolAccessibleTask: TaskProvider<out Task>,
     checkPresenceOfDefaultGraalJniConfigTask: TaskProvider<out Task>,
     packageMainJarTask: TaskProvider<out Task>,
     packageBootstrapJarTask: TaskProvider<out Task>
 ): TaskProvider<out Task> {
-    return tasks.register("createGraalNativeImage", Exec::class.java) {
+    return tasks.register("create${name.capitalized()}GraalNativeImage", Exec::class.java) {
         with(it) {
             group = "godot-kotlin-jvm"
             description = "Converts main.jar and bootstrap.jar into a GraalVM native image."
@@ -29,11 +32,6 @@ fun Project.createGraalNativeImageTask(
             doFirst {
                 val libsDir = project.buildDir.resolve("libs")
                 val resourcesDir = project.buildDir.resolve("resources")
-
-
-                val mainJar = File(libsDir, "main.jar")
-                val godotBootstrapJar = File(libsDir, "godot-bootstrap.jar")
-
 
                 workingDir = libsDir
 
@@ -86,9 +84,9 @@ fun Project.createGraalNativeImageTask(
 
                         godotJvmExtension.nativeImageToolPath.get(),
                         "-cp",
-                        "\"${godotBootstrapJar.absolutePath}\";\"${mainJar.absolutePath}\"",
+                        "\"$jar\"",
                         "--shared",
-                        "-H:Name=usercode",
+                        "-H:Name=$name",
                         jniConfigurationFilesArgument,
                         reflectionConfigurationFilesArgument,
                         resourceConfigurationFilesArgument,
@@ -107,16 +105,16 @@ fun Project.createGraalNativeImageTask(
                     commandLine(
                         godotJvmExtension.nativeImageToolPath.get(),
                         "-cp",
-                        "${godotBootstrapJar.absolutePath}:${mainJar.absolutePath}",
+                        "$jar",
                         "--shared",
-                        "-H:Name=usercode",
+                        "-H:Name=$name",
                         jniConfigurationFilesArgument,
                         reflectionConfigurationFilesArgument,
                         resourceConfigurationFilesArgument,
                         "-H:IncludeResources=${resourcesDir.absolutePath}/main/META-INF/services/*.*",
                         "--no-fallback",
                         verboseArgument,
-                    )
+                        )
                 }
             }
         }

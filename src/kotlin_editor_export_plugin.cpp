@@ -25,19 +25,25 @@ void KotlinEditorExportPlugin::_export_begin(const HashSet<String>& p_features, 
         _generate_export_configuration_file(jni::Jvm::ART);
     } else {
         String graal_usercode_lib = "usercode.so";
+        String graal_bootstrap_lib = "bootstrap.so";
         if (p_features.has("Windows")) {
             graal_usercode_lib = "usercode.dll";
+            graal_bootstrap_lib = "bootstrap.dll";
         } else if (is_osx_export) {
             graal_usercode_lib = "usercode.dylib";
+            graal_bootstrap_lib = "bootstrap.dylib";
         } else if (p_features.has("X11")) {
             graal_usercode_lib = "usercode.so";
+            graal_bootstrap_lib = "bootstrap.so";
         } else if (p_features.has("wasm")) {
-            graal_usercode_lib = "usercode.so";
+          graal_usercode_lib = "usercode.so";
+          graal_bootstrap_lib = "bootstrap.so";
         }
         if (p_features.has(all_jvm_feature)) {
             files_to_add.push_back("res://build/libs/main.jar");
             files_to_add.push_back("res://build/libs/godot-bootstrap.jar");
             files_to_add.push_back(vformat("res://build/libs/%s", graal_usercode_lib));
+            files_to_add.push_back(vformat("res://build/libs/%s", graal_bootstrap_lib));
             _generate_export_configuration_file(GDKotlin::get_instance().get_configuration().get_vm_type());
 
         } else {
@@ -55,6 +61,7 @@ void KotlinEditorExportPlugin::_export_begin(const HashSet<String>& p_features, 
                         break;
                     case jni::Jvm::GRAAL_NATIVE_IMAGE:
                         files_to_add.push_back(vformat("res://build/libs/%s", graal_usercode_lib));
+                        files_to_add.push_back(vformat("res://build/libs/%s", graal_bootstrap_lib));
                         _generate_export_configuration_file(jni::Jvm::GRAAL_NATIVE_IMAGE);
                         is_graal_only = true;
 

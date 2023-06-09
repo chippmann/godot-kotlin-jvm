@@ -55,7 +55,17 @@ fun Project.setupTasks() {
             // START: graal native image specific tasks
             val checkNativeImageToolAccessibleTask = checkNativeImageToolAccessibleTask()
             val checkPresenceOfDefaultGraalJniConfigTask = checkPresenceOfDefaultGraalJniConfigTask()
-            val createGraalNativeImageTask = createGraalNativeImageTask(
+            val createUsercodeGraalNativeImageTask = createGraalNativeImageTask(
+                jar = project.buildDir.resolve("libs").resolve("main.jar"),
+                name = "usercode",
+                checkNativeImageToolAccessibleTask = checkNativeImageToolAccessibleTask,
+                checkPresenceOfDefaultGraalJniConfigTask = checkPresenceOfDefaultGraalJniConfigTask,
+                packageMainJarTask = packageMainJarTask,
+                packageBootstrapJarTask = packageBootstrapJarTask
+            )
+            val createBootstrapGraalNativeImageTask = createGraalNativeImageTask(
+                jar = project.buildDir.resolve("libs").resolve("bootstrap.jar"),
+                name = "bootstrap",
                 checkNativeImageToolAccessibleTask = checkNativeImageToolAccessibleTask,
                 checkPresenceOfDefaultGraalJniConfigTask = checkPresenceOfDefaultGraalJniConfigTask,
                 packageMainJarTask = packageMainJarTask,
@@ -71,7 +81,8 @@ fun Project.setupTasks() {
                 deleteBuildLockTask = deleteBuildLockTask,
                 packageBootstrapDexJarTask = packageBootstrapDexJarTask,
                 packageMainDexJarTask = packageMainDexJarTask,
-                createGraalNativeImageTask = createGraalNativeImageTask,
+                createUsercodeGraalNativeImageTask = createUsercodeGraalNativeImageTask,
+                createBootstrapGraalNativeImageTask = createBootstrapGraalNativeImageTask,
                 generateGdIgnoreFilesTask = generateGdIgnoreFilesTask,
             )
 

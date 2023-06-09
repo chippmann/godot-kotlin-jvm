@@ -4,7 +4,7 @@ registeredName = WebTest
 fqName = godot.tests.WebTest
 baseType = Control
 supertypes = [
-	godot.Control,
+    godot.Control,
 	godot.CanvasItem,
 	godot.Node,
 	godot.Object,
@@ -12,11 +12,11 @@ supertypes = [
 	kotlin.Any
 ]
 signals = [
-	
+    
 ]
 properties = [
-	
+    
 ]
 functions = [
-	on_click
+    on_click
 ]

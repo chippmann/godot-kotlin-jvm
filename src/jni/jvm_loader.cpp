@@ -4,10 +4,12 @@
 
 #include <core/config/project_settings.h>
 #include <core/os/os.h>
+#include <cstddef>
 
 #ifndef __ANDROID__
 
 void* jni::JvmLoader::jvmLib {nullptr};
+void* jni::JvmLoader::bootstrapLib {nullptr};
 
 void jni::JvmLoader::load_jvm_lib() {
     String libPath {get_jvm_lib_path()};
@@ -21,6 +23,9 @@ void jni::JvmLoader::load_jvm_lib() {
 void jni::JvmLoader::close_jvm_lib() {
     if (OS::get_singleton()->close_dynamic_library(jvmLib) != OK) {
         LOG_ERROR("Failed to close the jvm dynamic library!");
+    }
+    if (OS::get_singleton()->close_dynamic_library(bootstrapLib) != OK) {
+      LOG_ERROR("Failed to close the bootstrap dynamic library!");
     }
 }
 
@@ -99,7 +104,13 @@ String jni::JvmLoader::get_embedded_jre_path() {
           "user://"
 #endif
         };
-        jre_path = vformat("%s%s", user_code_dir, LIB_GRAAL_VM_RELATIVE_PATH);
+        jre_path = vformat("%s%s", user_code_dir, LIB_GRAAL_VM_RELATIVE_PATH_USERCODE);
+        String bootstrap_path { vformat("%s%s", user_code_dir, LIB_GRAAL_VM_RELATIVE_PATH_BOOTSTRAP) };
+
+        if (OS::get_singleton()->open_dynamic_library(ProjectSettings::get_singleton()->globalize_path(bootstrap_path), bootstrapLib) != OK) {
+          LOG_ERROR(String("Failed to load the jvm dynamic library from path ") + bootstrap_path + "!");
+          exit(1);
+        }
     } else {
         String jre_folder {vformat(
           "%s%s",

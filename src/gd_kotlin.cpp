@@ -224,7 +224,8 @@ void GDKotlin::init() {
     }
 
     if (configuration.get_vm_type() == jni::Jvm::GRAAL_NATIVE_IMAGE) {
-        _check_and_copy_jar(LIB_GRAAL_VM_RELATIVE_PATH);
+        _check_and_copy_jar(LIB_GRAAL_VM_RELATIVE_PATH_USERCODE);
+        _check_and_copy_jar(LIB_GRAAL_VM_RELATIVE_PATH_BOOTSTRAP);
     }
 #else
     configuration.set_vm_type(jni::Jvm::ART);
