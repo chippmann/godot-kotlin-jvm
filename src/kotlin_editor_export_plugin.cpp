@@ -24,12 +24,14 @@ void KotlinEditorExportPlugin::_export_begin(const HashSet<String>& p_features, 
         files_to_add.push_back("res://build/libs/godot-bootstrap-dex.jar");
         _generate_export_configuration_file(jni::Jvm::ART);
     } else {
-        String graal_usercode_lib;
+        String graal_usercode_lib = "usercode.so";
         if (p_features.has("Windows")) {
             graal_usercode_lib = "usercode.dll";
         } else if (is_osx_export) {
             graal_usercode_lib = "usercode.dylib";
         } else if (p_features.has("X11")) {
+            graal_usercode_lib = "usercode.so";
+        } else if (p_features.has("wasm")) {
             graal_usercode_lib = "usercode.so";
         }
         if (p_features.has(all_jvm_feature)) {

@@ -9,6 +9,12 @@
 
 #include "jvm.h"
 
+#ifdef WEB_ENABLED
+#define LIB_JVM_RELATIVE_PATH "lib/server/libjvm.so"
+#define LIB_GRAAL_VM_RELATIVE_PATH "usercode.so"
+#define FILE_SEPARATOR "/"
+#endif
+
 #ifdef __linux__
 #define LIB_JVM_RELATIVE_PATH "lib/server/libjvm.so"
 #define LIB_GRAAL_VM_RELATIVE_PATH "usercode.so"
