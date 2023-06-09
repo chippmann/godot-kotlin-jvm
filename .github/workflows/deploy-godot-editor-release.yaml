@@ -5,6 +5,8 @@ on:
     workflows: [ "Create Draft Release" ]
     types:
       - completed
+    branches:
+      - master
 
 env:
   SCONS_CACHE_MSVC_CONFIG: true
