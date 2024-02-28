@@ -58,9 +58,15 @@ tasks {
     register("runGutTests", Exec::class.java) {
         group = "verification"
 
-        val editorExecutable: String = requireNotNull(project.findProperty("editorExecutable") as? String) {
-            "No editor executable provided! Did you forget to pass in '-PeditorExecutable=path/to/executable'"
-        }
+        val editorExecutable: String = projectDir
+            .resolve("../../../../bin")
+            .listFiles()
+            ?.firstOrNull { it.startsWith("godot.") && it.isFile && it.canExecute() }
+            ?.absolutePath
+            ?: run {
+                throw Exception("Could not find editor executable")
+            }
+
         var testCount = 0
         var successfulTestCount = 0
         var isJvmClosed = false
@@ -97,7 +103,7 @@ tasks {
             commandLine(
                 "cmd",
                 "/c",
-                "$editorExecutable",
+                editorExecutable,
                 "-s",
                 "--headless",
                 "--path",
@@ -108,7 +114,7 @@ tasks {
             commandLine(
                 "bash",
                 "-c",
-                "$editorExecutable",
+                editorExecutable,
                 "-s",
                 "--headless",
                 "--path",
