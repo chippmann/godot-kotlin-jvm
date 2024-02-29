@@ -100,6 +100,8 @@ tasks {
             }
         }
 
+        isIgnoreExitValue = true
+
         if (HostManager.hostIsMingw) {
             commandLine(
                     "cmd",
