@@ -55,7 +55,7 @@ kotlin.sourceSets.main {
 
 
 tasks {
-    register("runGutTests", Exec::class.java) {
+    register<Exec>("runGutTests") {
         group = "verification"
 
         val editorExecutable: String = projectDir
@@ -66,9 +66,7 @@ tasks {
                 }
                 ?.firstOrNull { it.name.startsWith("godot.") }
                 ?.absolutePath
-                ?: run {
-                    throw Exception("Could not find editor executable")
-                }
+                ?: throw Exception("Could not find editor executable")
 
         var testCount = 0
         var successfulTestCount = 0
@@ -107,12 +105,14 @@ tasks {
                     "cmd",
                     "/c",
                     "$editorExecutable -s --headless --path $projectDir addons/gut/gut_cmdln.gd",
+                    "||", "exit", "/B", "0"
             )
         } else {
             commandLine(
                     "bash",
                     "-c",
                     "$editorExecutable -s --headless --path $projectDir addons/gut/gut_cmdln.gd",
+                    "||", "true"
             )
         }
     }
