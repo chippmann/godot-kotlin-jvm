@@ -18,13 +18,13 @@ class Simple: Node3D() {
 }
 ```
 
-The [classes](../user-guide/classes.md) section covers in detail what we did here, but for now `@RegisterClass` will register the class to Godot. Now we can trigger a build.
+The [classes](../user-guide/classes.md) section covers in details what we did here, but for now `@RegisterClass` will register the class to Godot. Now we can trigger a build.
 
 ```shell
 ./gradlew build
 ``` 
 
-Once the build completes, you will be able to use your class in Godot. Simply attach the generated `gdj` file (you'll learn what this file is in the [user guide](../user-guide/api-differences.md)) to a node like you would do in GDScript. If you rebuild the project while the editor is open, your classes will be reloaded automatically in Godot and you can use them.
+Once the build completes, you will be able to use your class in Godot. Simply attach the generated `gdj` file (By default, generated in the `gdj/` directory at the root of the project. For more details, read [user guide](../user-guide/api-differences.md#registration-files-gdj)) to a node like you would do in GDScript. If you rebuild the project while the editor is open, your classes will be reloaded automatically in Godot and you can use them.
 
 ![Attach Node Script](../assets/img/attach.png)
 
@@ -33,6 +33,33 @@ Once the build completes, you will be able to use your class in Godot. Simply at
 
 
 ## Final project structure
-The final project should look like this:
 
-![Final project structure](../assets/img/final_project_structure.png)
+The final filesystem project should look like this:
+
+```
+~/Dev/Workspace/kotlin-godot-demo tree
+.
+├── build
+│   └── libs
+├── build.gradle.kts
+├── gdj
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradlew
+├── gradlew.bat
+├── icon.svg
+├── kotlin-godot-demo.iml
+├── project.godot
+├── settings.gradle.kts
+└── src
+    └── main
+        └── kotlin
+            └── com
+                └── utopiarise
+                    └── demo
+                        └── Simple.kt
+
+12 directories, 10 files
+```
