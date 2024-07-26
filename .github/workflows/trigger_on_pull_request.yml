@@ -36,14 +36,6 @@ jobs:
       godot-version: ${{ needs.setup-build-variables.outputs['godot-version'] }}
       jvm-version: ${{ needs.setup-build-variables.outputs['jvm-version'] }}
 
-  build-ios:
-    name: 🍏 Build iOS
-    uses: ./.github/workflows/build_ios.yml
-    needs:
-      - setup-build-variables
-    with:
-      godot-version: ${{ needs.setup-build-variables.outputs['godot-version'] }}
-
   build-linux:
     name: 🐧 Build Linux
     uses: ./.github/workflows/build_linux.yml
@@ -79,16 +71,6 @@ jobs:
       godot-kotlin-jvm-version: ${{ needs.setup-build-variables.outputs['godot-kotlin-jvm-version'] }}
       godot-version: ${{ needs.setup-build-variables.outputs['godot-version'] }}
 
-  assemble-ios:
-    name: 🍏 Assemble ios
-    uses: ./.github/workflows/assemble_ios.yml
-    needs:
-      - setup-build-variables
-      - build-ios
-    with:
-      godot-kotlin-jvm-version: ${{ needs.setup-build-variables.outputs['godot-kotlin-jvm-version'] }}
-      godot-version: ${{ needs.setup-build-variables.outputs['godot-version'] }}
-
   assemble-linux:
     name: 🐧 Assemble linux
     uses: ./.github/workflows/assemble_linux.yml
@@ -117,7 +99,6 @@ jobs:
     needs:
       - setup-build-variables
       - build-android # uploads finished export template directly
-      - assemble-ios # export templates need to be packed into xcode project
       - build-linux # uploads finished export template directly
       - assemble-macos # export templates need to be packed into app
       - build-windows # uploads finished export template directly

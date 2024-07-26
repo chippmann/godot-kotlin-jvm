@@ -33,16 +33,6 @@ jobs:
           cp android_templates/android_debug.apk templates/android_debug.apk
           cp android_templates/android_release.apk templates/android_release.apk
 
-      - name: Download ios export template
-        uses: actions/download-artifact@v4
-        with:
-          name: export_template_all_ios
-          path: "./"
-
-      - name: Move ios export template
-        shell: sh
-        run: mv export_template_all_ios.zip templates/ios.zip
-
       - name: Download linux x86_64 debug export template
         uses: actions/download-artifact@v4
         with:

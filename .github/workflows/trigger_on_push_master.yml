@@ -41,14 +41,6 @@ jobs:
       godot-version: ${{ needs.setup-build-variables.outputs['godot-version'] }}
       jvm-version: ${{ needs.setup-build-variables.outputs['jvm-version'] }}
 
-  build-ios:
-    name: 🍏 Build iOS
-    uses: ./.github/workflows/build_ios.yml
-    needs:
-      - setup-build-variables
-    with:
-      godot-version: ${{ needs.setup-build-variables.outputs['godot-version'] }}
-
   build-linux:
     name: 🐧 Build Linux
     uses: ./.github/workflows/build_linux.yml
