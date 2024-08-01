@@ -1,6 +1,7 @@
 #include "memory_manager.h"
 
 #include "binding/kotlin_binding_manager.h"
+#include "gd_kotlin.h"
 
 bool MemoryManager::check_instance(JNIEnv* p_raw_env, jobject p_instance, jlong p_raw_ptr, jlong instance_id) {
     auto* instance {reinterpret_cast<Object*>(static_cast<uintptr_t>(p_raw_ptr))};
@@ -100,7 +101,9 @@ bool MemoryManager::unref_native_core_type(JNIEnv* p_raw_env, jobject p_instance
 
 void MemoryManager::notify_leak(JNIEnv* p_raw_env, jobject p_instance) {
 #ifdef DEBUG_ENABLED
-    JVM_CRASH_NOW_MSG("JVM instances are leaking.");
+    if (!GDKotlin::get_instance().get_configuration().disable_leak_warning_on_close) {
+        JVM_CRASH_NOW_MSG("JVM instances are leaking.");
+    }
 #endif
 }
 
